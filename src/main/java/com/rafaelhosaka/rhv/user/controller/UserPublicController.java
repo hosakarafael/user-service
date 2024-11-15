@@ -1,8 +1,10 @@
 package com.rafaelhosaka.rhv.user.controller;
 
 import com.rafaelhosaka.rhv.user.dto.UserRequest;
+import com.rafaelhosaka.rhv.user.dto.UserResponse;
 import com.rafaelhosaka.rhv.user.model.User;
 import com.rafaelhosaka.rhv.user.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/pb")
 @RequiredArgsConstructor
-public class UserController {
+public class UserPublicController {
     private final UserService userService;
 
     @GetMapping
@@ -21,8 +23,12 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findAll());
     }
 
-    @PostMapping
-    public ResponseEntity<Integer> createUser(@RequestBody UserRequest userRequest){
-        return ResponseEntity.ok().body(userService.createUser(userRequest));
+    @GetMapping("{id}")
+    public ResponseEntity<UserResponse> findById(@PathVariable("id") Integer id){
+        try{
+            return ResponseEntity.ok().body(userService.findById(id));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

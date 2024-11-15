@@ -1,4 +1,6 @@
 package com.rafaelhosaka.rhv.user.dto;
 
-public record UserRequest(Long id, String name, String imageUrl) {
+import java.util.Date;
+
+public record UserRequest(Integer id, String name, String email , String imageUrl, Date createdAt) {
 }
