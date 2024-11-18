@@ -18,10 +18,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
-    public Integer createUser(UserRequest userRequest){
+    public UserResponse createUser(UserRequest userRequest){
         var user = mapper.toUser(userRequest);
         user.setCreatedAt(new Date());
-        return userRepository.save(user).getId();
+        userRepository.save(user);
+        return mapper.toUserResponse(user);
     }
 
     public List<User> findAll() {
@@ -33,6 +34,14 @@ public class UserService {
                 .map(mapper::toUserResponse)
                 .orElseThrow(
                         () -> new EntityNotFoundException("User with ID "+id+" not found")
+                );
+    }
+
+    public UserResponse findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(mapper::toUserResponse)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User with email "+email+" not found")
                 );
     }
 }
