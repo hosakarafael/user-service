@@ -1,8 +1,9 @@
 package com.rafaelhosaka.rhv.user.controller;
 
+import com.rafaelhosaka.rhv.user.dto.HistoryRequest;
+import com.rafaelhosaka.rhv.user.dto.HistoryResponse;
 import com.rafaelhosaka.rhv.user.dto.UserRequest;
 import com.rafaelhosaka.rhv.user.dto.UserResponse;
-import com.rafaelhosaka.rhv.user.model.User;
 import com.rafaelhosaka.rhv.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,15 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/history/{user_id}")
+    public ResponseEntity<List<HistoryResponse>> findHistoryByUserId(@PathVariable("user_id") Integer userId){
+        return ResponseEntity.ok().body(userService.findHistoryByUserId(userId));
+    }
+
+    @PostMapping("/history")
+    public void registerHistory(@RequestBody HistoryRequest historyRequest){
+        userService.registerHistory(historyRequest);
     }
 }
