@@ -1,10 +1,7 @@
 package com.rafaelhosaka.rhv.user.service;
 
 import com.rafaelhosaka.rhv.user.client.VideoClient;
-import com.rafaelhosaka.rhv.user.dto.HistoryRequest;
-import com.rafaelhosaka.rhv.user.dto.HistoryResponse;
-import com.rafaelhosaka.rhv.user.dto.UserRequest;
-import com.rafaelhosaka.rhv.user.dto.UserResponse;
+import com.rafaelhosaka.rhv.user.dto.*;
 import com.rafaelhosaka.rhv.user.model.History;
 import com.rafaelhosaka.rhv.user.model.User;
 import com.rafaelhosaka.rhv.user.repository.HistoryRepository;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +67,34 @@ public class UserService {
                     var userResponse = videoClient.findById(result.getVideoId());
                     result.setVideo(userResponse.getBody());
                 }).collect(Collectors.toList());
+    }
+
+    public Response subscribeToUser(SubscribeRequest subscribeRequest) throws Exception {
+        if(Objects.equals(subscribeRequest.subscriberId(), subscribeRequest.creatorId())){
+            throw new Exception("Subscriber and Creator cannot be the same");
+        }
+
+        User subscriber = userRepository.findById(subscribeRequest.subscriberId()).orElseThrow(() -> new Exception("subscriber with ID "+subscribeRequest.subscriberId()+" not found"));
+        User creator = userRepository.findById(subscribeRequest.creatorId()).orElseThrow(() -> new Exception("creator with ID "+subscribeRequest.creatorId()+" not found"));
+
+        if (!subscriber.getSubscribedUsers().contains(creator)) {
+            subscriber.getSubscribedUsers().add(creator);
+            userRepository.save(subscriber);
+            return new Response("User "+subscriber.getId()+" subscribed to User "+creator.getId()+" successfully");
+        }
+        throw new Exception("User "+subscriber.getId()+" already subscribed to User "+creator.getId());
+    }
+
+    public Response unsubscribeFromUser(SubscribeRequest subscribeRequest) throws Exception {
+        if(Objects.equals(subscribeRequest.subscriberId(), subscribeRequest.creatorId())){
+            throw new Exception("Subscriber and Creator cannot be the same");
+        }
+
+        User subscriber = userRepository.findById(subscribeRequest.subscriberId()).orElseThrow(() -> new Exception("subscriber with ID "+subscribeRequest.subscriberId()+" not found"));
+        User creator = userRepository.findById(subscribeRequest.creatorId()).orElseThrow(() -> new Exception("creator with ID "+subscribeRequest.creatorId()+" not found"));
+
+        subscriber.getSubscribedUsers().remove(creator);
+        userRepository.save(subscriber);
+        return new Response("User "+subscriber.getId()+" unsubscribed from User "+creator.getId()+" successfully");
     }
 }

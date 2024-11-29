@@ -1,9 +1,6 @@
 package com.rafaelhosaka.rhv.user.controller;
 
-import com.rafaelhosaka.rhv.user.dto.HistoryRequest;
-import com.rafaelhosaka.rhv.user.dto.HistoryResponse;
-import com.rafaelhosaka.rhv.user.dto.UserRequest;
-import com.rafaelhosaka.rhv.user.dto.UserResponse;
+import com.rafaelhosaka.rhv.user.dto.*;
 import com.rafaelhosaka.rhv.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +38,23 @@ public class UserController {
     @PostMapping("/history")
     public void registerHistory(@RequestBody HistoryRequest historyRequest){
         userService.registerHistory(historyRequest);
+    }
+
+    @PostMapping("/subscribe")
+    public ResponseEntity<Response> subscribe(@RequestBody SubscribeRequest subscribeRequest){
+        try{
+            return ResponseEntity.ok().body(userService.subscribeToUser(subscribeRequest));
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+        }
+    }
+
+    @PostMapping("/unsubscribe")
+    public ResponseEntity<Response>  unsubscribe(@RequestBody SubscribeRequest subscribeRequest){
+        try{
+            return ResponseEntity.ok().body(userService.unsubscribeFromUser(subscribeRequest));
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+        }
     }
 }
