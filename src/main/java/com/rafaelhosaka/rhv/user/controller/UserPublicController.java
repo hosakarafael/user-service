@@ -19,7 +19,7 @@ public class UserPublicController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<UserResponse>> findAll(){
         return ResponseEntity.ok().body(userService.findAll());
     }
 

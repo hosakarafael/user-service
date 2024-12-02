@@ -34,8 +34,10 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserResponse> findAll() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
     }
 
     public UserResponse findById(Integer id) {
