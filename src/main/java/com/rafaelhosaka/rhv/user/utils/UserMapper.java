@@ -7,6 +7,8 @@ import com.rafaelhosaka.rhv.user.model.User;
 import com.rafaelhosaka.rhv.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,6 +41,9 @@ public class UserMapper {
     }
 
     public List<SubscriptionResponse> toSubscriptionsResponse(Set<User> subscribedUsers) {
+        if(subscribedUsers == null){
+            return new ArrayList<>();
+        }
         return subscribedUsers.stream()
                 .map(subscribedUser -> new SubscriptionResponse(subscribedUser.getId(), subscribedUser.getName()))
                 .collect(Collectors.toList());
