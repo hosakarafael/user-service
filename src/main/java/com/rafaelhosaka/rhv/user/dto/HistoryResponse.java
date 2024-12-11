@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryResponse{
+public class HistoryResponse extends Response{
     private Integer userId;
     private Integer videoId;
     private VideoResponse video;

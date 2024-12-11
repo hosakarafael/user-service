@@ -31,8 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/history/{user_id}")
-    public ResponseEntity<List<HistoryResponse>> findHistoryByUserId(@PathVariable("user_id") Integer userId){
-        return ResponseEntity.ok().body(userService.findHistoryByUserId(userId));
+    public ResponseEntity findHistoryByUserId(@PathVariable("user_id") Integer userId){
+        try {
+            return ResponseEntity.ok().body(userService.findHistoryByUserId(userId));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+        }
     }
 
     @PostMapping("/history")
