@@ -1,5 +1,7 @@
 package com.rafaelhosaka.rhv.user.controller;
 
+import com.rafaelhosaka.rhv.user.dto.ErrorCode;
+import com.rafaelhosaka.rhv.user.dto.Response;
 import com.rafaelhosaka.rhv.user.dto.UserRequest;
 import com.rafaelhosaka.rhv.user.dto.UserResponse;
 import com.rafaelhosaka.rhv.user.model.User;
@@ -24,11 +26,13 @@ public class UserPublicController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable("id") Integer id){
+    public ResponseEntity<Response> findById(@PathVariable("id") Integer id){
         try{
             return ResponseEntity.ok().body(userService.findById(id));
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.ENTITY_NOT_FOUND));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
         }
     }
 }

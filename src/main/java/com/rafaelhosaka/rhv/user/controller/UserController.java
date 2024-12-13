@@ -22,11 +22,13 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    ResponseEntity<UserResponse> findByEmail(@PathVariable("email") String email){
+    ResponseEntity<Response> findByEmail(@PathVariable("email") String email){
         try{
             return ResponseEntity.ok().body(userService.findByEmail(email));
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.ENTITY_NOT_FOUND));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
         }
     }
 

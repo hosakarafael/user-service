@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponse{
+public class UserResponse extends Response{
     private Integer id;
     private String name;
     private String email;
