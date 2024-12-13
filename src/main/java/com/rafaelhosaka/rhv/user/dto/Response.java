@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Response {
-    private String message;
-    private ErrorCode errorCode;
+    private String message = "";
+    private ErrorCode errorCode = ErrorCode.DEFAULT;
 
     public Response(String message){
         this.message = message;
