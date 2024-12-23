@@ -19,6 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String imageUrl;
     private Date createdAt;
