@@ -15,7 +15,7 @@ public class VideoResponse extends Response{
     private String description;
     private String videoUrl;
     private int views;
-    private Integer userId;
     private UserResponse user;
     private Date createdAt;
+    private Visibility visibility;
 }

@@ -26,9 +26,9 @@ public class UserController {
         try{
             return ResponseEntity.ok().body(userService.findByEmail(email));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.ENTITY_NOT_FOUND));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_ENTITY_NOT_FOUND));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_EXCEPTION));
         }
     }
 
@@ -37,7 +37,7 @@ public class UserController {
         try {
             return ResponseEntity.ok().body(userService.findHistoryByUserId(userId));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_EXCEPTION));
         }
     }
 

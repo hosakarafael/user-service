@@ -30,9 +30,9 @@ public class UserPublicController {
         try{
             return ResponseEntity.ok().body(userService.findById(id));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.ENTITY_NOT_FOUND));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_ENTITY_NOT_FOUND));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_EXCEPTION));
         }
     }
 }

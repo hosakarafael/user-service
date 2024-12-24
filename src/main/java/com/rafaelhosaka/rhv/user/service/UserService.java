@@ -66,8 +66,27 @@ public class UserService {
         return historyRepository.findByUserId(userId, sort).stream()
                 .map(historyMapper::toHistoryResponse)
                 .peek(result -> {
-                    var userResponse = videoClient.findById(result.getVideoId());
-                    result.setVideo(userResponse.getBody());
+                    var videoResponse = videoClient.findById(result.getVideoId()).getBody();
+                    if (videoResponse != null) {
+                        //Video may be deleted
+                        if(videoResponse.getErrorCode() == ErrorCode.VS_ENTITY_NOT_FOUND){
+                            result.setVideoDeleted(true);
+                        }else{
+                            //video is now private
+                            if(videoResponse.getVisibility() == Visibility.PRIVATE){
+                                //user own this video
+                                if(videoResponse.getUser().getId() == userId){
+                                    result.setVideo(videoResponse);
+                                //user does not own this video
+                                }else{
+                                    result.setVideoVisible(false);
+                                }
+                            //video is now public
+                            }else{
+                                result.setVideo(videoResponse);
+                            }
+                        }
+                    }
                 }).collect(Collectors.toList());
     }
 

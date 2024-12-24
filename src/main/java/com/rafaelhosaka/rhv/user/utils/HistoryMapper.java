@@ -15,11 +15,12 @@ public class HistoryMapper {
     }
 
     public HistoryResponse toHistoryResponse(History history){
-        return new HistoryResponse(
-                history.getUserId(),
-                history.getVideoId(),
-                null,
-                history.getWatchedAt()
-        );
+        return HistoryResponse.builder()
+                .userId(history.getUserId())
+                .videoId(history.getVideoId())
+                .watchedAt(history.getWatchedAt())
+                .isVideoVisible(true)
+                .isVideoDeleted(false)
+                .build();
     }
 }
