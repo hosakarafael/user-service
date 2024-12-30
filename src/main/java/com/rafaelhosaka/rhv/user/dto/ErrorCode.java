@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ErrorCode {
     US_SUCCESS("US000"),
     US_ENTITY_NOT_FOUND("US001"),
+    US_UPLOAD_FAILED("US002"),
     US_EXCEPTION("US100"),
+
     //EXTERNAL
     VS_ENTITY_NOT_FOUND("VS001");
 

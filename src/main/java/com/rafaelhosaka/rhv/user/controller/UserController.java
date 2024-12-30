@@ -4,11 +4,11 @@ import com.rafaelhosaka.rhv.user.dto.*;
 import com.rafaelhosaka.rhv.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -61,6 +61,17 @@ public class UserController {
             return ResponseEntity.ok().body(userService.unsubscribeFromUser(subscribeRequest));
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+        }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<Response> uploadProfileImage(@RequestParam("profileImageFile") MultipartFile profileImageFile, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader){
+        try {
+            return ResponseEntity.ok().body(userService.uploadProfileImage(profileImageFile, authHeader));
+        }catch (IOException e){
+            return ResponseEntity.internalServerError().body(new Response(e.getMessage(), ErrorCode.US_UPLOAD_FAILED));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.US_EXCEPTION));
         }
     }
 }

@@ -37,6 +37,7 @@ public class UserMapper {
                 .createdAt(user.getCreatedAt())
                 .subscribedUsers(toSubscriptionsResponse(user.getSubscribedUsers()))
                 .subscribers(userRepository.countSubscribers(user.getId()))
+                .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
 
@@ -45,7 +46,10 @@ public class UserMapper {
             return new ArrayList<>();
         }
         return subscribedUsers.stream()
-                .map(subscribedUser -> new SubscriptionResponse(subscribedUser.getId(), subscribedUser.getName()))
+                .map(subscribedUser -> new SubscriptionResponse(
+                        subscribedUser.getId(),
+                        subscribedUser.getName(),
+                        subscribedUser.getProfileImageUrl()))
                 .collect(Collectors.toList());
     }
 }

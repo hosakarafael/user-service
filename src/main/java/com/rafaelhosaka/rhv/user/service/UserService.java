@@ -12,7 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +27,8 @@ public class UserService {
     private final VideoClient videoClient;
     private final UserMapper userMapper;
     private final HistoryMapper historyMapper;
+    private final CloudinaryService cloudinaryService;
+    private final JwtService jwtService;
 
     public UserResponse createUser(UserRequest userRequest){
         var user = userMapper.toUser(userRequest);
@@ -117,5 +120,17 @@ public class UserService {
         subscriber.getSubscribedUsers().remove(creator);
         userRepository.save(subscriber);
         return new Response("User "+subscriber.getId()+" unsubscribed from User "+creator.getId()+" successfully");
+    }
+
+    public Response uploadProfileImage(MultipartFile profileImage, String authHeader) throws IOException {
+        String token = authHeader.startsWith("Bearer ") ?
+                authHeader.substring(7) : null;
+        var subject = jwtService.extractSubject(token);
+        var user = userRepository.findByEmail(subject).orElseThrow(
+                () -> new EntityNotFoundException("User with email "+subject+" not found"));
+        var profileImageUrl = cloudinaryService.upload(profileImage.getBytes(), "users/"+user.getId(), "profile" , "image");
+        user.setProfileImageUrl(profileImageUrl);
+        userRepository.save(user);
+        return userMapper.toUserResponse(user);
     }
 }

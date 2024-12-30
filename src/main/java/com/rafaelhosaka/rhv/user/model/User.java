@@ -30,4 +30,5 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "creator_id")
     )
     private Set<User> subscribedUsers = new HashSet<>();
+    private String profileImageUrl;
 }
