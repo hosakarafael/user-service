@@ -23,7 +23,6 @@ public class UserMapper {
                 .id(request.id())
                 .name(request.name())
                 .email(request.email())
-                .imageUrl(request.imageUrl())
                 .createdAt(request.createdAt())
                 .build();
     }
@@ -33,7 +32,6 @@ public class UserMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
-                .imageUrl(user.getImageUrl())
                 .createdAt(user.getCreatedAt())
                 .subscribedUsers(toSubscriptionsResponse(user.getSubscribedUsers()))
                 .subscribers(userRepository.countSubscribers(user.getId()))
